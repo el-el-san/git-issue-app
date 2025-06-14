@@ -71,7 +71,7 @@ Releases Latest の app-release.apk をダウンロードしインストール
 
 - GitHub Client IDはハードコードされていません
 - トークンはセキュアに保存されます
-- 設定の詳細は[SECURE_CONFIG.md](SECURE_CONFIG.md)を参照
+- Apk ビルドはGithub Actionsによって実施されます。 GH_CLIENT_ID にてSecretsにClientID設定が必要です
 
 ## ライセンス
 
