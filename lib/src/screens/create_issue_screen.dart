@@ -162,58 +162,109 @@ class _CreateIssueScreenState extends State<CreateIssueScreen> {
   }
 
   Widget _buildLabelSelector() {
-    if (_availableLabels.isEmpty) return const SizedBox.shrink();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Labels',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              children: [
+                Icon(Icons.label, color: AppTheme.primary, size: 20),
+                const SizedBox(width: 8),
+                const Text(
+                  'Labels',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Spacer(),
+                if (_isLoadingLabels)
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+              ],
             ),
-            if (_isLoadingLabels)
-              const SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(strokeWidth: 2),
+            const SizedBox(height: 12),
+            if (_availableLabels.isEmpty && !_isLoadingLabels)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppTheme.outline),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 16, color: AppTheme.secondary),
+                    const SizedBox(width: 8),
+                    Text(
+                      'No labels available for this repository',
+                      style: TextStyle(
+                        color: AppTheme.secondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (_availableLabels.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Select labels for this issue:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppTheme.secondary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _availableLabels.map((label) {
+                      final isSelected = _selectedLabels.contains(label['name']);
+                      return FilterChip(
+                        label: Text(label['name']),
+                        selected: isSelected,
+                        backgroundColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.2),
+                        selectedColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.4),
+                        labelStyle: TextStyle(
+                          color: isSelected ? Colors.white : AppTheme.onSurface,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                        onSelected: (selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedLabels.add(label['name']);
+                            } else {
+                              _selectedLabels.remove(label['name']);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  if (_selectedLabels.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Selected: ${_selectedLabels.join(', ')}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppTheme.secondary,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ],
               ),
           ],
         ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: _availableLabels.map((label) {
-            final isSelected = _selectedLabels.contains(label['name']);
-            return FilterChip(
-              label: Text(label['name']),
-              selected: isSelected,
-              backgroundColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.2),
-              selectedColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.4),
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : AppTheme.onSurface,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    _selectedLabels.add(label['name']);
-                  } else {
-                    _selectedLabels.remove(label['name']);
-                  }
-                });
-              },
-            );
-          }).toList(),
-        ),
-      ],
+      ),
     );
   }
 

@@ -167,4 +167,16 @@ class GitHubApiService {
       throw Exception('Failed to fetch labels: $e');
     }
   }
+
+  Future<Map<String, dynamic>> updateIssueLabels(String owner, String repo, int issueNumber, List<String> labels) async {
+    try {
+      final response = await _dio.patch(
+        '/repos/$owner/$repo/issues/$issueNumber',
+        data: {'labels': labels},
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to update issue labels: $e');
+    }
+  }
 }
