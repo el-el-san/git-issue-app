@@ -231,8 +231,8 @@ class _CreateIssueScreenState extends State<CreateIssueScreen> {
                       return FilterChip(
                         label: Text(label['name']),
                         selected: isSelected,
-                        backgroundColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.2),
-                        selectedColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.4),
+                        backgroundColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.2),
+                        selectedColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.4),
                         labelStyle: TextStyle(
                           color: isSelected ? Colors.white : AppTheme.onSurface,
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

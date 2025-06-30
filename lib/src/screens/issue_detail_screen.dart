@@ -161,8 +161,8 @@ class _IssueDetailScreenState extends State<IssueDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                     color: _issue!.state == 'open' 
-                        ? AppTheme.issueOpen.withOpacity(0.2)
-                        : AppTheme.issueClosed.withOpacity(0.2),
+                        ? AppTheme.issueOpen.withValues(alpha: 0.2)
+                        : AppTheme.issueClosed.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -435,8 +435,8 @@ class _IssueDetailScreenState extends State<IssueDetailScreen> {
                 return FilterChip(
                   label: Text(label['name']),
                   selected: isSelected,
-                  backgroundColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.2),
-                  selectedColor: Color(int.parse('0xFF${label['color']}')).withOpacity(0.4),
+                  backgroundColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.2),
+                  selectedColor: Color(int.parse('0xFF${label['color']}')).withValues(alpha: 0.4),
                   labelStyle: TextStyle(
                     color: isSelected ? Colors.white : AppTheme.onSurface,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
