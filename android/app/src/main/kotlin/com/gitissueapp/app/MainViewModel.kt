@@ -3,6 +3,7 @@ package com.gitissueapp.app
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gitissueapp.app.data.api.GitHubApiService
+import com.gitissueapp.app.data.model.Issue
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,7 @@ import retrofit2.Retrofit
 
 data class MainUiState(
     val isLoading: Boolean = false,
-    val issueCount: Int = 0,
+    val issues: List<Issue> = emptyList(),
     val error: String? = null
 )
 
@@ -23,6 +24,10 @@ class MainViewModel : ViewModel() {
     val uiState = _uiState.asStateFlow()
     
     private val apiService = createApiService()
+    
+    // Test repository - can be changed later for user configuration
+    private val testOwner = "octocat"
+    private val testRepo = "Hello-World"
     
     private fun createApiService(): GitHubApiService {
         val json = Json { ignoreUnknownKeys = true }
@@ -34,14 +39,13 @@ class MainViewModel : ViewModel() {
             .create(GitHubApiService::class.java)
     }
     
-    fun testGitHubApi() {
+    fun loadIssues() {
         viewModelScope.launch {
             _uiState.value = MainUiState(isLoading = true)
             
             try {
-                // Test with a public repository
-                val issues = apiService.getIssues("octocat", "Hello-World")
-                _uiState.value = MainUiState(issueCount = issues.size)
+                val issues = apiService.getIssues(testOwner, testRepo)
+                _uiState.value = MainUiState(issues = issues)
             } catch (e: Exception) {
                 _uiState.value = MainUiState(error = e.message ?: "Unknown error")
             }

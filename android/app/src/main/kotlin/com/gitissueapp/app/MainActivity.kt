@@ -1,16 +1,20 @@
 package com.gitissueapp.app
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitissueapp.app.databinding.ActivityMainBinding
+import com.gitissueapp.app.ui.IssueAdapter
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private val issueAdapter = IssueAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +26,40 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun setupUI() {
-        binding.welcomeText.text = "🎉 GitHub Issue Manager\n\nPhase 2: API Integration Ready!"
+        // Setup RecyclerView
+        binding.issuesRecyclerView.apply {
+            adapter = issueAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
         
-        binding.nextPhaseButton.setOnClickListener {
-            // Test GitHub API
-            viewModel.testGitHubApi()
+        // Setup button click
+        binding.loadIssuesButton.setOnClickListener {
+            viewModel.loadIssues()
         }
     }
     
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
-                binding.welcomeText.text = when {
-                    state.isLoading -> "🔄 Testing GitHub API..."
+                // Update status text
+                binding.statusText.text = when {
+                    state.isLoading -> "🔄 Loading issues from GitHub..."
                     state.error != null -> "❌ Error: ${state.error}"
-                    state.issueCount > 0 -> "✅ Success! Found ${state.issueCount} issues\n\nGitHub API is working!"
-                    else -> "🎉 GitHub Issue Manager\n\nPhase 2: API Integration Ready!"
+                    state.issues.isNotEmpty() -> "✅ Found ${state.issues.size} issues"
+                    else -> "🎉 GitHub Issue Manager\n\nTap 'Load Issues' to fetch data"
                 }
                 
-                binding.nextPhaseButton.isEnabled = !state.isLoading
+                // Update UI visibility
+                binding.loadIssuesButton.isEnabled = !state.isLoading
+                
+                if (state.issues.isNotEmpty()) {
+                    binding.issuesRecyclerView.visibility = View.VISIBLE
+                    binding.statusText.visibility = View.GONE
+                    issueAdapter.submitList(state.issues)
+                } else {
+                    binding.issuesRecyclerView.visibility = View.GONE
+                    binding.statusText.visibility = View.VISIBLE
+                }
             }
         }
     }
