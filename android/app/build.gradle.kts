@@ -8,11 +8,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gitissueapp.v5"
+        applicationId = "com.gitissueapp.v6"
         minSdk = 24
         targetSdk = 34
-        versionCode = 5
-        versionName = "5.0.0"
+        versionCode = 6
+        versionName = "6.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,10 +23,9 @@ android {
             isDebuggable = true
         }
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false  // Disable ProGuard/R8 to preserve type information
+            isShrinkResources = false
             isDebuggable = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("debug") // Use debug signing for now
         }
     }

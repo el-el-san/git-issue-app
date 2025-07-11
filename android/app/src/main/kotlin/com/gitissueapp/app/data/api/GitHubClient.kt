@@ -2,7 +2,7 @@ package com.gitissueapp.app.data.api
 
 import com.gitissueapp.app.data.model.Issue
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -35,8 +35,20 @@ class GitHubClient {
         
         val jsonString = response.body?.string() ?: throw Exception("Empty response")
         
-        // Parse JSON array to List<Issue>
-        val listType = object : TypeToken<List<Issue>>() {}.type
-        gson.fromJson(jsonString, listType)
+        // Parse JSON array manually without TypeToken
+        val jsonArray = JsonParser.parseString(jsonString).asJsonArray
+        val issues = mutableListOf<Issue>()
+        
+        for (jsonElement in jsonArray) {
+            try {
+                val issue = gson.fromJson(jsonElement, Issue::class.java)
+                issues.add(issue)
+            } catch (e: Exception) {
+                // Skip problematic issues and continue
+                android.util.Log.w("GitHubClient", "Failed to parse issue: ${e.message}")
+            }
+        }
+        
+        issues
     }
 }

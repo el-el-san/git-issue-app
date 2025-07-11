@@ -42,10 +42,14 @@ class MainViewModel : ViewModel() {
             
             try {
                 addLog("Starting to load issues from $currentOwner/$currentRepo")
+                addLog("URL: https://api.github.com/repos/$currentOwner/$currentRepo/issues")
                 addLog("Sending HTTP request to GitHub API...")
                 val issues = gitHubClient.getIssues(currentOwner, currentRepo)
                 addLog("✅ Successfully loaded ${issues.size} issues")
-                addLog("Issues: ${issues.map { "#${it.number} ${it.title}" }.take(3).joinToString(", ")}")
+                if (issues.isNotEmpty()) {
+                    addLog("First issue: #${issues[0].number} ${issues[0].title}")
+                    addLog("Author: ${issues[0].user.login}")
+                }
                 _uiState.value = currentState.copy(
                     isLoading = false, 
                     issues = issues,
