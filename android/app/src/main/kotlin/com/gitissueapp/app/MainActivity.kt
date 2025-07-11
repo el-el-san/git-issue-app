@@ -1,24 +1,19 @@
 package com.gitissueapp.app
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.TextView
-import android.graphics.Color
+import androidx.appcompat.app.AppCompatActivity
+import com.gitissueapp.app.databinding.ActivityMainBinding
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
+    
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        // Create the simplest possible UI
-        val textView = TextView(this).apply {
-            text = "✅ GitIssue App\n\nKotlin Implementation\nWorking Successfully!"
-            textSize = 18f
-            setPadding(64, 64, 64, 64)
-            setTextColor(Color.BLACK)
-            setBackgroundColor(Color.WHITE)
-        }
-        
-        setContentView(textView)
+        // Set welcome message
+        binding.welcomeText.text = "🎉 GitHub Issue Manager\n\nPhase 2: Basic UI Structure\nReady to add features!"
     }
 }
