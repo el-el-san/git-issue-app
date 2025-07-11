@@ -39,21 +39,30 @@ jobs:
     - name: Build debug APK
       run: |
         cd android
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --info
       
     - name: Build release APK
       run: |
         cd android
-        ./gradlew assembleRelease
+        ./gradlew assembleRelease --info
+        
+    - name: List APK files
+      run: |
+        echo "=== Debug APK files ==="
+        find android -name "*.apk" -type f | head -20
+        echo "=== APK directory structure ==="
+        ls -la android/app/build/outputs/apk/ || echo "APK outputs directory not found"
         
     - name: Upload debug APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+        path: android/app/build/outputs/apk/debug/*.apk
+        if-no-files-found: warn
         
     - name: Upload release APK
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: android/app/build/outputs/apk/release/app-release.apk
+        path: android/app/build/outputs/apk/release/*.apk
+        if-no-files-found: warn

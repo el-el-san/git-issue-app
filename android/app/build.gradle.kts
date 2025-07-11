@@ -21,9 +21,22 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            isDebuggable = true
+        }
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug") // Use debug signing for now
+        }
+    }
+    
+    signingConfigs {
+        getByName("debug") {
+            // Debug signing (for development)
         }
     }
 
