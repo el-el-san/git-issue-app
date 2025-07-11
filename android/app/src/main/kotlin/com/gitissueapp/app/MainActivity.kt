@@ -32,9 +32,20 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
         
-        // Setup button click
+        // Setup button clicks
         binding.loadIssuesButton.setOnClickListener {
             viewModel.loadIssues()
+        }
+        
+        binding.setRepositoryButton.setOnClickListener {
+            val repoText = binding.repositoryInput.text.toString().trim()
+            if (repoText.contains("/") && repoText.split("/").size == 2) {
+                val parts = repoText.split("/")
+                viewModel.setRepository(parts[0], parts[1])
+                binding.statusText.text = "Repository set to $repoText\nTap 'Load Issues' to fetch data"
+            } else {
+                binding.statusText.text = "❌ Invalid format. Use: owner/repository"
+            }
         }
     }
     

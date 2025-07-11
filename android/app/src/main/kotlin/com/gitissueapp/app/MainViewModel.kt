@@ -25,20 +25,27 @@ class MainViewModel : ViewModel() {
     
     private val apiService = createApiService()
     
-    // Test repository - use a more active repository with issues
-    private val testOwner = "microsoft"
-    private val testRepo = "vscode"
+    // Default repository - use a smaller, more reliable repository  
+    private var currentOwner = "octocat"
+    private var currentRepo = "Hello-World"
     
     private fun createApiService(): GitHubApiService {
-        val json = Json { ignoreUnknownKeys = true }
+        // Configure JSON with more permissive settings
+        val json = Json { 
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            isLenient = true
+        }
         
         // Add HTTP logging for debugging
         val loggingInterceptor = okhttp3.logging.HttpLoggingInterceptor().apply {
-            level = okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+            level = okhttp3.logging.HttpLoggingInterceptor.Level.BASIC // Reduce logging verbosity
         }
         
         val client = okhttp3.OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .build()
         
         return Retrofit.Builder()
@@ -54,8 +61,8 @@ class MainViewModel : ViewModel() {
             _uiState.value = MainUiState(isLoading = true)
             
             try {
-                android.util.Log.d("GitHubAPI", "Loading issues from $testOwner/$testRepo")
-                val issues = apiService.getIssues(testOwner, testRepo)
+                android.util.Log.d("GitHubAPI", "Loading issues from $currentOwner/$currentRepo")
+                val issues = apiService.getIssues(currentOwner, currentRepo)
                 android.util.Log.d("GitHubAPI", "Loaded ${issues.size} issues")
                 _uiState.value = MainUiState(issues = issues)
             } catch (e: Exception) {
@@ -70,4 +77,13 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+    
+    fun setRepository(owner: String, repo: String) {
+        currentOwner = owner
+        currentRepo = repo
+        // Clear current issues when repository changes
+        _uiState.value = MainUiState()
+    }
+    
+    fun getCurrentRepository(): String = "$currentOwner/$currentRepo"
 }
