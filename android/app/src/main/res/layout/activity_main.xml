@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="owner/repository"
-                android:text="octocat/Hello-World"
+                android:text="el-el-san/git-issue-app"
                 android:singleLine="true" />
             
             <com.google.android.material.button.MaterialButton
@@ -79,6 +79,65 @@
         android:padding="16dp"
         android:text="🎉 GitHub Issue Manager\n\nTap 'Load Issues' to fetch data"
         android:textSize="16sp" />
+
+    <!-- Debug Log Section -->
+    <LinearLayout
+        android:id="@+id/debug_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Debug Log:"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/copy_log_button"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Copy"
+                android:textSize="12sp"
+                android:minHeight="32dp" />
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clear_log_button"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textSize="12sp"
+                android:minHeight="32dp" />
+        </LinearLayout>
+        
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@android:color/black"
+            android:padding="8dp">
+            
+            <TextView
+                android:id="@+id/debug_log_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:fontFamily="monospace"
+                android:text="Debug log will appear here..."
+                android:textIsSelectable="true" />
+        </ScrollView>
+    </LinearLayout>
 
     <!-- Issues RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

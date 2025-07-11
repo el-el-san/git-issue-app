@@ -8,11 +8,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gitissueapp.v4"
+        applicationId = "com.gitissueapp.v5"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
-        versionName = "4.0.0"
+        versionCode = 5
+        versionName = "5.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

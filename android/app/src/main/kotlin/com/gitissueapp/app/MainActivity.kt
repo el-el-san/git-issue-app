@@ -1,7 +1,11 @@
 package com.gitissueapp.app
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -47,6 +51,18 @@ class MainActivity : AppCompatActivity() {
                 binding.statusText.text = "❌ Invalid format. Use: owner/repository"
             }
         }
+        
+        // Debug log buttons
+        binding.copyLogButton.setOnClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Debug Log", binding.debugLogText.text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "Debug log copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+        
+        binding.clearLogButton.setOnClickListener {
+            viewModel.clearLog()
+        }
     }
     
     private fun observeViewModel() {
@@ -62,6 +78,14 @@ class MainActivity : AppCompatActivity() {
                 
                 // Update UI visibility
                 binding.loadIssuesButton.isEnabled = !state.isLoading
+                
+                // Show debug log when there's content or errors
+                if (state.debugLog.isNotEmpty() || state.error != null) {
+                    binding.debugSection.visibility = View.VISIBLE
+                    binding.debugLogText.text = state.debugLog
+                } else {
+                    binding.debugSection.visibility = View.GONE
+                }
                 
                 if (state.issues.isNotEmpty()) {
                     binding.issuesRecyclerView.visibility = View.VISIBLE

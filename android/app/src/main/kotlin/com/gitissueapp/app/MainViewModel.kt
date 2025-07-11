@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 data class MainUiState(
     val isLoading: Boolean = false,
     val issues: List<Issue> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val debugLog: String = ""
 )
 
 class MainViewModel : ViewModel() {
@@ -21,37 +22,67 @@ class MainViewModel : ViewModel() {
     
     private val gitHubClient = GitHubClient()
     
-    // Default repository - use a smaller, more reliable repository  
-    private var currentOwner = "octocat"
-    private var currentRepo = "Hello-World"
+    // Default repository - this repository
+    private var currentOwner = "el-el-san"
+    private var currentRepo = "git-issue-app"
+    
+    private var debugLogBuilder = StringBuilder()
+    
+    private fun addLog(message: String) {
+        val timestamp = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+        debugLogBuilder.append("[$timestamp] $message\n")
+        _uiState.value = _uiState.value.copy(debugLog = debugLogBuilder.toString())
+        android.util.Log.d("GitHubAPI", message)
+    }
     
     fun loadIssues() {
         viewModelScope.launch {
-            _uiState.value = MainUiState(isLoading = true)
+            val currentState = _uiState.value
+            _uiState.value = currentState.copy(isLoading = true, error = null)
             
             try {
-                android.util.Log.d("GitHubAPI", "Loading issues from $currentOwner/$currentRepo")
+                addLog("Starting to load issues from $currentOwner/$currentRepo")
+                addLog("Sending HTTP request to GitHub API...")
                 val issues = gitHubClient.getIssues(currentOwner, currentRepo)
-                android.util.Log.d("GitHubAPI", "Loaded ${issues.size} issues")
-                _uiState.value = MainUiState(issues = issues)
+                addLog("✅ Successfully loaded ${issues.size} issues")
+                addLog("Issues: ${issues.map { "#${it.number} ${it.title}" }.take(3).joinToString(", ")}")
+                _uiState.value = currentState.copy(
+                    isLoading = false, 
+                    issues = issues,
+                    debugLog = debugLogBuilder.toString()
+                )
             } catch (e: Exception) {
-                android.util.Log.e("GitHubAPI", "Error loading issues", e)
+                addLog("❌ Error loading issues: ${e.javaClass.simpleName}")
+                addLog("Error message: ${e.message}")
+                addLog("Stack trace: ${e.stackTrace.take(3).joinToString("\n") { "  at $it" }}")
+                
                 val errorMessage = when (e) {
                     is java.net.UnknownHostException -> "No internet connection"
                     is java.io.IOException -> "Network error: ${e.message}"
                     is com.google.gson.JsonSyntaxException -> "Data parsing error: ${e.message}"
                     else -> e.message ?: "Unknown error"
                 }
-                _uiState.value = MainUiState(error = errorMessage)
+                _uiState.value = currentState.copy(
+                    isLoading = false,
+                    error = errorMessage,
+                    debugLog = debugLogBuilder.toString()
+                )
             }
         }
     }
     
     fun setRepository(owner: String, repo: String) {
+        addLog("Repository changed from $currentOwner/$currentRepo to $owner/$repo")
         currentOwner = owner
         currentRepo = repo
         // Clear current issues when repository changes
-        _uiState.value = MainUiState()
+        _uiState.value = _uiState.value.copy(issues = emptyList(), error = null)
+    }
+    
+    fun clearLog() {
+        debugLogBuilder.clear()
+        debugLogBuilder.append("Debug log cleared\n")
+        _uiState.value = _uiState.value.copy(debugLog = debugLogBuilder.toString())
     }
     
     fun getCurrentRepository(): String = "$currentOwner/$currentRepo"
