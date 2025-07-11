@@ -1,7 +1,13 @@
 package com.gitissueapp.app
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import android.util.Log
 
-@HiltAndroidApp
-class GitIssueApplication : Application()
+class GitIssueApplication : Application() {
+    
+    override fun onCreate() {
+        Log.d("GitIssueApp", "Application onCreate started")
+        super.onCreate()
+        Log.d("GitIssueApp", "Application onCreate completed")
+    }
+}
