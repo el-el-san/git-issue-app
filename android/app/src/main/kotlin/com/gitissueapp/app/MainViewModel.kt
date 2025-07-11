@@ -25,15 +25,25 @@ class MainViewModel : ViewModel() {
     
     private val apiService = createApiService()
     
-    // Test repository - can be changed later for user configuration
-    private val testOwner = "octocat"
-    private val testRepo = "Hello-World"
+    // Test repository - use a more active repository with issues
+    private val testOwner = "microsoft"
+    private val testRepo = "vscode"
     
     private fun createApiService(): GitHubApiService {
         val json = Json { ignoreUnknownKeys = true }
         
+        // Add HTTP logging for debugging
+        val loggingInterceptor = okhttp3.logging.HttpLoggingInterceptor().apply {
+            level = okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+        }
+        
+        val client = okhttp3.OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+        
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
+            .client(client)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(GitHubApiService::class.java)
@@ -44,10 +54,19 @@ class MainViewModel : ViewModel() {
             _uiState.value = MainUiState(isLoading = true)
             
             try {
+                android.util.Log.d("GitHubAPI", "Loading issues from $testOwner/$testRepo")
                 val issues = apiService.getIssues(testOwner, testRepo)
+                android.util.Log.d("GitHubAPI", "Loaded ${issues.size} issues")
                 _uiState.value = MainUiState(issues = issues)
             } catch (e: Exception) {
-                _uiState.value = MainUiState(error = e.message ?: "Unknown error")
+                android.util.Log.e("GitHubAPI", "Error loading issues", e)
+                val errorMessage = when (e) {
+                    is java.net.UnknownHostException -> "No internet connection"
+                    is retrofit2.HttpException -> "HTTP ${e.code()}: ${e.message()}"
+                    is kotlinx.serialization.SerializationException -> "Data parsing error: ${e.message}"
+                    else -> e.message ?: "Unknown error"
+                }
+                _uiState.value = MainUiState(error = errorMessage)
             }
         }
     }

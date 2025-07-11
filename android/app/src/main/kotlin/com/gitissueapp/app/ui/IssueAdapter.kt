@@ -26,7 +26,11 @@ class IssueAdapter : ListAdapter<Issue, IssueAdapter.IssueViewHolder>(IssueDiffC
             binding.apply {
                 issueNumber.text = "#${issue.number}"
                 issueTitle.text = issue.title
-                issueBody.text = issue.body ?: "No description"
+                issueBody.text = when {
+                    issue.body.isNullOrBlank() -> "No description provided"
+                    issue.body.length > 150 -> issue.body.take(150) + "..."
+                    else -> issue.body
+                }
                 issueAuthor.text = "by @${issue.user.login}"
                 
                 // Set state color
