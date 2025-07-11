@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gitissueapp.app.data.api.GitHubApiService
 import com.gitissueapp.app.data.model.Issue
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 data class MainUiState(
     val isLoading: Boolean = false,
@@ -30,16 +28,9 @@ class MainViewModel : ViewModel() {
     private var currentRepo = "Hello-World"
     
     private fun createApiService(): GitHubApiService {
-        // Configure JSON with more permissive settings
-        val json = Json { 
-            ignoreUnknownKeys = true
-            coerceInputValues = true
-            isLenient = true
-        }
-        
         // Add HTTP logging for debugging
         val loggingInterceptor = okhttp3.logging.HttpLoggingInterceptor().apply {
-            level = okhttp3.logging.HttpLoggingInterceptor.Level.BASIC // Reduce logging verbosity
+            level = okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
         }
         
         val client = okhttp3.OkHttpClient.Builder()
@@ -51,7 +42,7 @@ class MainViewModel : ViewModel() {
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .client(client)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(GitHubApiService::class.java)
     }
@@ -70,7 +61,7 @@ class MainViewModel : ViewModel() {
                 val errorMessage = when (e) {
                     is java.net.UnknownHostException -> "No internet connection"
                     is retrofit2.HttpException -> "HTTP ${e.code()}: ${e.message()}"
-                    is kotlinx.serialization.SerializationException -> "Data parsing error: ${e.message}"
+                    is com.google.gson.JsonSyntaxException -> "Data parsing error: ${e.message}"
                     else -> e.message ?: "Unknown error"
                 }
                 _uiState.value = MainUiState(error = errorMessage)
