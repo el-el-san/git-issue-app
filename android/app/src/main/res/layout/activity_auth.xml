@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- GitHub Logo/Icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🐙"
+        android:textSize="64sp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Authenticate with GitHub"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in to create issues and access private repositories"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Auth Status -->
+    <TextView
+        android:id="@+id/authStatusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ready to authenticate"
+        android:textSize="16sp"
+        android:textColor="?android:attr/textColorPrimary"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- User Code Display -->
+    <TextView
+        android:id="@+id/userCodeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?android:attr/textColorPrimary"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" />
+
+    <!-- Authenticate Button -->
+    <Button
+        android:id="@+id/authenticateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Authenticate with GitHub"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Open Browser Button -->
+    <Button
+        android:id="@+id/openBrowserButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open GitHub in Browser"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Button.TextButton" />
+
+    <!-- Copy Code Button -->
+    <Button
+        android:id="@+id/copyCodeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Copy User Code"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Button.TextButton" />
+
+    <!-- Skip Authentication -->
+    <Button
+        android:id="@+id/skipAuthButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skip (View public repositories only)"
+        android:textSize="14sp"
+        style="@style/Widget.Material3.Button.TextButton" />
+
+    <!-- Loading Indicator -->
+    <ProgressBar
+        android:id="@+id/loadingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+
+</LinearLayout>

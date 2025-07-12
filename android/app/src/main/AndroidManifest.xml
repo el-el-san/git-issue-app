@@ -23,6 +23,10 @@
         <activity
             android:name=".CreateIssueActivity"
             android:exported="false" />
+            
+        <activity
+            android:name=".AuthActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

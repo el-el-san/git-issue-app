@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.gitissueapp.app.data.api.GitHubClient
+import com.gitissueapp.app.data.storage.AuthTokenStorage
 import com.gitissueapp.app.databinding.ActivityIssueDetailBinding
 import kotlinx.coroutines.launch
 
@@ -35,6 +37,11 @@ class IssueDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityIssueDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize GitHub client with auth
+        val authTokenStorage = AuthTokenStorage(this)
+        val gitHubClient = GitHubClient(authTokenStorage)
+        viewModel.initialize(gitHubClient)
 
         setupRecyclerView()
         setupClickListeners()

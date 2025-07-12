@@ -1,9 +1,11 @@
 package com.gitissueapp.app
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gitissueapp.app.data.api.GitHubClient
 import com.gitissueapp.app.data.model.Issue
+import com.gitissueapp.app.data.storage.AuthTokenStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -12,21 +14,28 @@ data class MainUiState(
     val isLoading: Boolean = false,
     val issues: List<Issue> = emptyList(),
     val error: String? = null,
-    val debugLog: String = ""
+    val debugLog: String = "",
+    val isAuthenticated: Boolean = false
 )
 
-class MainViewModel : ViewModel() {
+class MainViewModel(context: Context) : ViewModel() {
     
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
     
-    private val gitHubClient = GitHubClient()
+    private val authTokenStorage = AuthTokenStorage(context)
+    private val gitHubClient = GitHubClient(authTokenStorage)
     
     // Default repository - this repository
     private var currentOwner = "el-el-san"
     private var currentRepo = "git-issue-app"
     
     private var debugLogBuilder = StringBuilder()
+    
+    init {
+        // Update authentication status
+        _uiState.value = _uiState.value.copy(isAuthenticated = authTokenStorage.isAuthenticated())
+    }
     
     private fun addLog(message: String) {
         val timestamp = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())

@@ -20,7 +20,11 @@ class CreateIssueViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(CreateIssueUiState())
     val uiState = _uiState.asStateFlow()
     
-    private val gitHubClient = GitHubClient()
+    private var gitHubClient: GitHubClient? = null
+    
+    fun initialize(gitHubClient: GitHubClient) {
+        this.gitHubClient = gitHubClient
+    }
     
     fun createIssue(owner: String, repo: String, title: String, body: String?) {
         viewModelScope.launch {
@@ -28,7 +32,7 @@ class CreateIssueViewModel : ViewModel() {
             _uiState.value = currentState.copy(isLoading = true, error = null)
             
             try {
-                val issue = gitHubClient.createIssue(owner, repo, title, body)
+                val issue = gitHubClient?.createIssue(owner, repo, title, body) ?: throw Exception("GitHubClient not initialized")
                 _uiState.value = currentState.copy(
                     isLoading = false, 
                     createdIssue = issue,

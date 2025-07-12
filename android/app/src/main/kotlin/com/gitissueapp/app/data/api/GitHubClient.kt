@@ -1,6 +1,7 @@
 package com.gitissueapp.app.data.api
 
 import com.gitissueapp.app.data.model.Issue
+import com.gitissueapp.app.data.storage.AuthTokenStorage
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,7 @@ import okhttp3.Request
 import okhttp3.MediaType.Companion.toMediaType
 import java.util.concurrent.TimeUnit
 
-class GitHubClient {
+class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
     
     private val httpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -19,6 +20,13 @@ class GitHubClient {
     
     private val gson = Gson()
     
+    private fun Request.Builder.addAuthHeader(): Request.Builder {
+        authTokenStorage?.getAuthorizationHeader()?.let { authHeader ->
+            addHeader("Authorization", authHeader)
+        }
+        return this
+    }
+    
     suspend fun getIssues(owner: String, repo: String): List<Issue> = withContext(Dispatchers.IO) {
         val url = "https://api.github.com/repos/$owner/$repo/issues?state=all&per_page=30"
         
@@ -26,6 +34,7 @@ class GitHubClient {
             .url(url)
             .addHeader("Accept", "application/vnd.github.v3+json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addAuthHeader()
             .build()
         
         val response = httpClient.newCall(request).execute()
@@ -60,6 +69,7 @@ class GitHubClient {
             .url(url)
             .addHeader("Accept", "application/vnd.github.v3+json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addAuthHeader()
             .build()
         
         val response = httpClient.newCall(request).execute()
@@ -87,6 +97,7 @@ class GitHubClient {
             .addHeader("Accept", "application/vnd.github.v3+json")
             .addHeader("Content-Type", "application/json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addAuthHeader()
             .post(okhttp3.RequestBody.create(
                 "application/json".toMediaType(), 
                 requestBodyString

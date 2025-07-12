@@ -24,6 +24,15 @@
             android:textStyle="bold" />
         
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/auth_button"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="🔐 Auth"
+            android:textColor="?attr/colorOnPrimary" />
+        
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/create_issue_button"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"

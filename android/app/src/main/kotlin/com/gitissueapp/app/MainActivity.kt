@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitissueapp.app.databinding.ActivityMainBinding
@@ -18,7 +20,14 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return MainViewModel(this@MainActivity) as T
+            }
+        }
+    }
     private lateinit var issueAdapter: IssueAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +52,10 @@ class MainActivity : AppCompatActivity() {
         // Setup button clicks
         binding.loadIssuesButton.setOnClickListener {
             viewModel.loadIssues()
+        }
+        
+        binding.authButton.setOnClickListener {
+            openAuthActivity()
         }
         
         binding.createIssueButton.setOnClickListener {
@@ -80,6 +93,11 @@ class MainActivity : AppCompatActivity() {
             val intent = IssueDetailActivity.createIntent(this, parts[0], parts[1], issue.number)
             startActivity(intent)
         }
+    }
+    
+    private fun openAuthActivity() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
     }
     
     private fun openCreateIssue() {
