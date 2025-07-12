@@ -9,18 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gitissueapp.app.data.model.Issue
 import com.gitissueapp.app.databinding.ItemIssueBinding
 
-class IssueAdapter : ListAdapter<Issue, IssueAdapter.IssueViewHolder>(IssueDiffCallback()) {
+class IssueAdapter(
+    private val onIssueClick: (Issue) -> Unit = {}
+) : ListAdapter<Issue, IssueAdapter.IssueViewHolder>(IssueDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IssueViewHolder {
         val binding = ItemIssueBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return IssueViewHolder(binding)
+        return IssueViewHolder(binding, onIssueClick)
     }
 
     override fun onBindViewHolder(holder: IssueViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class IssueViewHolder(private val binding: ItemIssueBinding) : RecyclerView.ViewHolder(binding.root) {
+    class IssueViewHolder(
+        private val binding: ItemIssueBinding,
+        private val onIssueClick: (Issue) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(issue: Issue) {
             binding.apply {
@@ -42,6 +47,11 @@ class IssueAdapter : ListAdapter<Issue, IssueAdapter.IssueViewHolder>(IssueDiffC
                         else -> Color.parseColor("#6b7280") // Gray
                     }
                 )
+                
+                // Set click listener
+                root.setOnClickListener {
+                    onIssueClick(issue)
+                }
             }
         }
     }

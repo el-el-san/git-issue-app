@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    private val issueAdapter = IssueAdapter()
+    private lateinit var issueAdapter: IssueAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,10 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun setupUI() {
-        // Setup RecyclerView
+        // Setup RecyclerView with click handler
+        issueAdapter = IssueAdapter { issue ->
+            openIssueDetail(issue)
+        }
         binding.issuesRecyclerView.apply {
             adapter = issueAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -39,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         // Setup button clicks
         binding.loadIssuesButton.setOnClickListener {
             viewModel.loadIssues()
+        }
+        
+        binding.createIssueButton.setOnClickListener {
+            openCreateIssue()
         }
         
         binding.setRepositoryButton.setOnClickListener {
@@ -62,6 +69,26 @@ class MainActivity : AppCompatActivity() {
         
         binding.clearLogButton.setOnClickListener {
             viewModel.clearLog()
+        }
+    }
+    
+    private fun openIssueDetail(issue: Issue) {
+        val repoText = viewModel.getCurrentRepository()
+        val parts = repoText.split("/")
+        if (parts.size == 2) {
+            val intent = IssueDetailActivity.createIntent(this, parts[0], parts[1], issue.number)
+            startActivity(intent)
+        }
+    }
+    
+    private fun openCreateIssue() {
+        val repoText = viewModel.getCurrentRepository()
+        val parts = repoText.split("/")
+        if (parts.size == 2) {
+            val intent = CreateIssueActivity.createIntent(this, parts[0], parts[1])
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Please set a valid repository first", Toast.LENGTH_SHORT).show()
         }
     }
     
