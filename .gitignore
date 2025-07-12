@@ -134,3 +134,8 @@ android/app/src/main/google-services.json
 ios/Flutter/flutter_export_environment.sh
 ios/Runner/GoogleService-Info.plist
 ios/firebase_app_id_file.json
+
+# APK build artifacts
+app-*.apk
+app-debug/
+app-release/
