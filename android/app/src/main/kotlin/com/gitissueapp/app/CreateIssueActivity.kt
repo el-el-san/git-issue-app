@@ -66,7 +66,7 @@ class CreateIssueActivity : AppCompatActivity() {
         val owner = intent.getStringExtra(EXTRA_OWNER) ?: return
         val repo = intent.getStringExtra(EXTRA_REPO) ?: return
 
-        viewModel.createIssue(owner, repo, title, body.ifBlank { null })
+        viewModel.createIssue(owner, repo, title, body?.ifBlank { null })
     }
 
     private fun observeViewModel() {

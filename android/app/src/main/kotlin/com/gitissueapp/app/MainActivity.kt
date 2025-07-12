@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gitissueapp.app.databinding.ActivityMainBinding
+import com.gitissueapp.app.data.model.Issue
 import com.gitissueapp.app.ui.IssueAdapter
 import kotlinx.coroutines.launch
 

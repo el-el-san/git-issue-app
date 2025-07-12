@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.MediaType.Companion.toMediaType
 import java.util.concurrent.TimeUnit
 
 class GitHubClient {
@@ -87,7 +88,7 @@ class GitHubClient {
             .addHeader("Content-Type", "application/json")
             .addHeader("User-Agent", "GitIssueApp")
             .post(okhttp3.RequestBody.create(
-                okhttp3.MediaType.Companion.get("application/json"), 
+                "application/json".toMediaType(), 
                 requestBodyString
             ))
             .build()
