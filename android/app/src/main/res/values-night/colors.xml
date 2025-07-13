@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Theme Color Palette - Material Design 3 -->
+    
+    <!-- Primary Colors -->
+    <color name="primary">#C084FC</color>          <!-- Light Purple -->
+    <color name="on_primary">#0A0A0A</color>       <!-- Dark Text -->
+    <color name="primary_container">#1A1B23</color> <!-- Dark Container -->
+    <color name="on_primary_container">#E8EAED</color>
+    
+    <!-- Secondary Colors -->
+    <color name="secondary">#F472B6</color>        <!-- Light Pink -->
+    <color name="on_secondary">#0A0A0A</color>
+    <color name="secondary_container">#1E1B20</color>
+    <color name="on_secondary_container">#E8EAED</color>
+    
+    <!-- Tertiary Colors -->
+    <color name="tertiary">#34D399</color>         <!-- Light Green -->
+    <color name="on_tertiary">#0A0A0A</color>
+    <color name="tertiary_container">#1A1F1C</color>
+    <color name="on_tertiary_container">#E8EAED</color>
+    
+    <!-- Surface Colors -->
+    <color name="surface">#121212</color>          <!-- Dark Surface -->
+    <color name="surface_variant">#1E1E1E</color>  <!-- Darker Variant -->
+    <color name="on_surface">#E8EAED</color>       <!-- Light Text -->
+    <color name="on_surface_variant">#C4C7C5</color>
+    
+    <!-- Background Colors -->
+    <color name="background">#0A0A0A</color>       <!-- Very Dark Background -->
+    <color name="on_background">#E8EAED</color>    <!-- Light Text -->
+    
+    <!-- Error Colors -->
+    <color name="error">#F87171</color>            <!-- Light Red -->
+    <color name="on_error">#0A0A0A</color>
+    <color name="error_container">#2D1B1B</color>
+    <color name="on_error_container">#F3E8E8</color>
+    
+    <!-- Outline Colors -->
+    <color name="outline">#3E3E3E</color>          <!-- Dark Outline -->
+    <color name="outline_variant">#2A2A2A</color>  <!-- Darker Outline -->
+    
+    <!-- Card and Component Colors -->
+    <color name="card_background">#1A1A1A</color>  <!-- Dark Card -->
+    <color name="elevated_surface">#1F1F1F</color> <!-- Elevated Dark Surface -->
+    
+    <!-- Status Colors -->
+    <color name="success">#34D399</color>          <!-- Green -->
+    <color name="warning">#FBBF24</color>          <!-- Yellow -->
+    <color name="info">#60A5FA</color>             <!-- Blue -->
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#8B5CF6</color>   <!-- Purple -->
+    <color name="gradient_middle">#EC4899</color>  <!-- Pink -->
+    <color name="gradient_end">#10B981</color>     <!-- Green -->
+</resources>

@@ -34,7 +34,9 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
     }
     
     suspend fun getIssues(owner: String, repo: String): List<Issue> = withContext(Dispatchers.IO) {
-        val url = "https://api.github.com/repos/$owner/$repo/issues?state=all&per_page=30"
+        val url = "https://api.github.com/repos/$owner/$repo/issues?state=all&per_page=100&sort=created&direction=desc"
+        
+        android.util.Log.d("GitHubClient", "Fetching issues from: $url")
         
         val request = Request.Builder()
             .url(url)
@@ -51,21 +53,27 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         }
         
         val jsonString = response.body?.string() ?: throw Exception("Empty response")
+        android.util.Log.d("GitHubClient", "Response body length: ${jsonString.length}")
+        android.util.Log.d("GitHubClient", "Response body preview: ${jsonString.take(200)}...")
         
         // Parse JSON array manually without TypeToken
         val jsonArray = JsonParser.parseString(jsonString).asJsonArray
         val issues = mutableListOf<Issue>()
         
-        for (jsonElement in jsonArray) {
+        android.util.Log.d("GitHubClient", "JSON array size: ${jsonArray.size()}")
+        
+        for ((index, jsonElement) in jsonArray.withIndex()) {
             try {
                 val issue = gson.fromJson(jsonElement, Issue::class.java)
                 issues.add(issue)
+                android.util.Log.d("GitHubClient", "Parsed issue $index: #${issue.number} ${issue.title}")
             } catch (e: Exception) {
                 // Skip problematic issues and continue
-                android.util.Log.w("GitHubClient", "Failed to parse issue: ${e.message}")
+                android.util.Log.w("GitHubClient", "Failed to parse issue $index: ${e.message}")
             }
         }
         
+        android.util.Log.d("GitHubClient", "Successfully parsed ${issues.size} issues")
         issues
     }
     

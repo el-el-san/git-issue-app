@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,32 @@ class MainActivity : AppCompatActivity() {
         binding.issuesRecyclerView.apply {
             adapter = issueAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
+        }
+        
+        // Setup repository dropdown with popular repositories
+        val repositories = arrayOf(
+            "el-el-san/git-issue-app",
+            "microsoft/vscode",
+            "facebook/react",
+            "google/flutter",
+            "kotlin/kotlin",
+            "microsoft/typescript",
+            "angular/angular",
+            "nodejs/node",
+            "torvalds/linux"
+        )
+        
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, repositories)
+        binding.repositoryDropdown.setAdapter(adapter)
+        
+        binding.repositoryDropdown.setOnItemClickListener { _, _, position, _ ->
+            val selectedRepo = repositories[position]
+            val parts = selectedRepo.split("/")
+            if (parts.size == 2) {
+                viewModel.setRepository(parts[0], parts[1])
+                binding.repositoryInput.setText(selectedRepo)
+                binding.statusText.text = "✅ Repository set to $selectedRepo\nTap 'Load Issues' to fetch data"
+            }
         }
         
         // Setup button clicks
@@ -126,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                 // Update repository input with saved value
                 if (state.currentRepository.isNotEmpty() && binding.repositoryInput.text.toString().isEmpty()) {
                     binding.repositoryInput.setText(state.currentRepository)
+                    binding.repositoryDropdown.setText(state.currentRepository, false)
                 }
                 
                 // Update status text

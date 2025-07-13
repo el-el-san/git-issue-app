@@ -81,13 +81,34 @@
                         android:textColor="@color/on_surface"
                         android:layout_marginBottom="16dp" />
 
+                    <!-- Repository Selector Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Modern.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="📂 Select Repository"
+                        app:startIconDrawable="@android:drawable/ic_menu_sort_by_size"
+                        app:endIconMode="dropdown_menu">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/repositoryDropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textSize="16sp"
+                            android:focusable="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Custom Repository Input -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.Modern.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:hint="👤 owner/repository"
-                        app:startIconDrawable="@android:drawable/ic_menu_search">
+                        android:hint="✏️ Custom owner/repository"
+                        app:startIconDrawable="@android:drawable/ic_menu_edit">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/repositoryInput"

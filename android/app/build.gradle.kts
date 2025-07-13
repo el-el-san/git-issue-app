@@ -8,11 +8,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gitissueapp.patversion"
+        applicationId = "com.gitissueapp.darktheme"
         minSdk = 24
         targetSdk = 34
-        versionCode = 11
-        versionName = "11.0.0"
+        versionCode = 12
+        versionName = "12.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
