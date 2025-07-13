@@ -32,8 +32,9 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         
         val request = Request.Builder()
             .url(url)
-            .addHeader("Accept", "application/vnd.github.v3+json")
+            .addHeader("Accept", "application/vnd.github+json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
             .addAuthHeader()
             .build()
         
@@ -67,8 +68,9 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         
         val request = Request.Builder()
             .url(url)
-            .addHeader("Accept", "application/vnd.github.v3+json")
+            .addHeader("Accept", "application/vnd.github+json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
             .addAuthHeader()
             .build()
         
@@ -91,12 +93,15 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         }
         
         val requestBodyString = gson.toJson(requestBody)
+        android.util.Log.d("GitHubClient", "Creating issue with URL: $url")
+        android.util.Log.d("GitHubClient", "Request body: $requestBodyString")
         
         val request = Request.Builder()
             .url(url)
-            .addHeader("Accept", "application/vnd.github.v3+json")
+            .addHeader("Accept", "application/vnd.github+json")
             .addHeader("Content-Type", "application/json")
             .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
             .addAuthHeader()
             .post(okhttp3.RequestBody.create(
                 "application/json".toMediaType(), 
@@ -107,7 +112,9 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         val response = httpClient.newCall(request).execute()
         
         if (!response.isSuccessful) {
-            throw Exception("HTTP ${response.code}: ${response.message}")
+            val errorBody = response.body?.string() ?: "No error details"
+            android.util.Log.e("GitHubClient", "Create issue failed: HTTP ${response.code}, Body: $errorBody")
+            throw Exception("HTTP ${response.code}: ${response.message}. Details: $errorBody")
         }
         
         val jsonString = response.body?.string() ?: throw Exception("Empty response")
