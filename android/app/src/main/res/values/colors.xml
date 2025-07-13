@@ -54,7 +54,17 @@
     
     <!-- Gradient Colors -->
     <color name="gradient_start">#6366F1</color>
-    <color name="gradient_end">#EC4899</color>
+    <color name="gradient_middle">#EC4899</color>
+    <color name="gradient_end">#10B981</color>
     <color name="gradient_surface_start">#FAFAFA</color>
     <color name="gradient_surface_end">#F3F4F6</color>
+    
+    <!-- Card and Component Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="elevated_surface">#F9FAFB</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="info">#3B82F6</color>
 </resources>
