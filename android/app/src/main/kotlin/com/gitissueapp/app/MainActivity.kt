@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun openAuthActivity() {
-        val intent = Intent(this, AuthActivity::class.java)
+        val intent = Intent(this, PatAuthActivity::class.java)
         startActivity(intent)
     }
     

@@ -1,6 +1,7 @@
 package com.gitissueapp.app.data.api
 
 import com.gitissueapp.app.data.model.Issue
+import com.gitissueapp.app.data.model.GitHubUser
 import com.gitissueapp.app.data.storage.AuthTokenStorage
 import com.google.gson.Gson
 import com.google.gson.JsonParser
@@ -124,5 +125,28 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         
         val jsonString = response.body?.string() ?: throw Exception("Empty response")
         gson.fromJson(jsonString, Issue::class.java)
+    }
+    
+    suspend fun testAuthentication(): GitHubUser = withContext(Dispatchers.IO) {
+        val url = "https://api.github.com/user"
+        
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Accept", "application/vnd.github+json")
+            .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
+            .addAuthHeader()
+            .build()
+        
+        val response = httpClient.newCall(request).execute()
+        
+        if (!response.isSuccessful) {
+            val errorBody = response.body?.string() ?: "No error details"
+            android.util.Log.e("GitHubClient", "Auth test failed: HTTP ${response.code}, Body: $errorBody")
+            throw Exception("Authentication failed: HTTP ${response.code}. ${if (response.code == 401) "Invalid token" else errorBody}")
+        }
+        
+        val jsonString = response.body?.string() ?: throw Exception("Empty response")
+        gson.fromJson(jsonString, GitHubUser::class.java)
     }
 }

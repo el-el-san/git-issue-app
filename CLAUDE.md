@@ -303,16 +303,22 @@ jobs:
 - ✅ **Phase 3**: 核心機能 (Issue一覧、詳細、作成)
 - ✅ **GitHub Actions**: 自動APKビルド設定
 
-### 最新ビルド: v9.0.0 (2025-07-13)
+### 最新ビルド: v10.0.0 (2025-07-13) - PAT認証版
 **場所**: `/storage/emulated/0/Download/`
-- **GitIssueApp-v9-Fixed-release.apk** (6.1MB) - 本番用
-- **GitIssueApp-v9-Fixed-debug.apk** (7.6MB) - デバッグ用
+- **GitIssueApp-v10-PAT-release.apk** (予定) - 本番用
+- **GitIssueApp-v10-PAT-debug.apk** (予定) - デバッグ用
 
-**修正内容:**
-1. OAuth認証404エラー修正 (form-encoded形式対応)
-2. Issue作成404エラー修正 (GitHub API v4互換)
-3. バージョン競合問題解決 (v9.0.0)
-4. 詳細エラーログ追加
+**重要な変更:**
+1. **OAuth → PAT認証に変更** (セキュリティ向上・シンプル化)
+2. **ApplicationId変更** (`com.gitissueapp.patversion`) - 競合解決
+3. **重複アイコン問題解決** (古いOAuth関連ファイル削除)
+4. **バージョン10.0.0** - 更新インストール対応
+
+**PAT認証の利点:**
+- より安全で信頼性の高い認証方式
+- GitHubの推奨認証方法
+- プライベートリポジトリへの確実なアクセス
+- 404エラーの根本的解決
 
 ### 残課題・改善点
 - [ ] **Phase 4**: コメント機能実装

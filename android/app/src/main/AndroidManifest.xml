@@ -25,7 +25,7 @@
             android:exported="false" />
             
         <activity
-            android:name=".AuthActivity"
+            android:name=".PatAuthActivity"
             android:exported="false" />
     </application>
 
