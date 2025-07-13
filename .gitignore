@@ -139,3 +139,8 @@ ios/firebase_app_id_file.json
 app-*.apk
 app-debug/
 app-release/
+
+# Documentation files (Claude Code specific)
+CLAUDE.md
+claude.md
+*.claude.md
