@@ -305,18 +305,18 @@ jobs:
 - ✅ **Phase 5**: 2025年モダンUI実装 (Material Design 3 Expressive)
 - ✅ **GitHub Actions**: 自動APKビルド設定
 
-### 最新ビルド: v11.0.0 (2025-07-13) - モダンUI版 ✅
-**場所**: `./apk-downloads-modern-ui/`
-- **app-release.apk** (6.2MB) - 本番用
-- **app-debug.apk** (7.7MB) - デバッグ用
+### 最新ビルド: v12.0.0 (2025-07-13) - ダークテーマ版 ✅
+**場所**: `/sdcard/Download/`
+- **GitIssueApp-v12-DarkTheme-release.apk** (6.4MB) - 本番用
+- **GitIssueApp-v12-DarkTheme-debug.apk** (7.9MB) - デバッグ用
 
-**v11.0.0の新機能:**
-1. **2025年モダンUI実装** (Material Design 3 Expressive)
-2. **Bento Grid レイアウト** (モダンなカードベースデザイン)
-3. **新カラーパレット** (Blue-Purple-Pink グラデーション)
-4. **ソフト角丸デザイン** (20dp radius)
-5. **絵文字強化** (視覚的にフレンドリーなインターフェース)
-6. **設定永続化** (アプリ終了後もリポジトリ・認証情報を記憶)
+**v12.0.0の新機能:**
+1. **ダークテーマ完全実装** (Material Design 3 Night Colors)
+2. **リポジトリ選択ドロップダウン** (人気リポジトリのプリセット)
+3. **アプリ更新競合解決** (applicationId: com.gitissueapp.darktheme)
+4. **Issue一覧表示改善** (per_page=100, デバッグログ強化)
+5. **リポジトリ切り替え機能** (ドロップダウン + カスタム入力)
+6. **前バージョンからの全機能継承** (PAT認証、設定永続化、モダンUI)
 
 **PAT認証の利点:**
 - より安全で信頼性の高い認証方式

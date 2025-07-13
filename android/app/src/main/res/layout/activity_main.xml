@@ -119,12 +119,30 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/setRepositoryButton"
-                        style="@style/Widget.Modern.Button.Primary"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="✅ Set Repository" />
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/loadReposButton"
+                            style="@style/Widget.Modern.Button.Secondary"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:text="🔄 Load Repos" />
+
+                        <Button
+                            android:id="@+id/setRepositoryButton"
+                            style="@style/Widget.Modern.Button.Primary"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="✅ Set" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

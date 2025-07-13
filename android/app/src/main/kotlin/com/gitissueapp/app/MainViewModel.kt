@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gitissueapp.app.data.api.GitHubClient
 import com.gitissueapp.app.data.model.Issue
+import com.gitissueapp.app.data.model.Repository
 import com.gitissueapp.app.data.storage.AuthTokenStorage
 import com.gitissueapp.app.data.storage.AppPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,8 @@ import kotlinx.coroutines.launch
 data class MainUiState(
     val isLoading: Boolean = false,
     val issues: List<Issue> = emptyList(),
+    val repositories: List<Repository> = emptyList(),
+    val isLoadingRepositories: Boolean = false,
     val error: String? = null,
     val debugLog: String = "",
     val isAuthenticated: Boolean = false,
@@ -70,6 +73,13 @@ class MainViewModel(context: Context) : ViewModel() {
         if (appPreferences.isFirstLaunch()) {
             appPreferences.setFirstLaunch(false)
             addLog("First app launch completed")
+        }
+        
+        // Auto-load repositories on startup
+        if (isAuthenticated) {
+            loadAuthenticatedUserRepositories()
+        } else {
+            loadUserRepositories("el-el-san")
         }
     }
     
@@ -144,4 +154,59 @@ class MainViewModel(context: Context) : ViewModel() {
     }
     
     fun getCurrentRepository(): String = "$currentOwner/$currentRepo"
+    
+    fun loadUserRepositories(username: String = "el-el-san") {
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            _uiState.value = currentState.copy(isLoadingRepositories = true)
+            
+            try {
+                addLog("Loading repositories for user: $username")
+                val repositories = gitHubClient.getUserRepositories(username)
+                addLog("✅ Successfully loaded ${repositories.size} repositories")
+                
+                _uiState.value = currentState.copy(
+                    isLoadingRepositories = false,
+                    repositories = repositories,
+                    debugLog = debugLogBuilder.toString()
+                )
+            } catch (e: Exception) {
+                addLog("❌ Error loading repositories: ${e.message}")
+                _uiState.value = currentState.copy(
+                    isLoadingRepositories = false,
+                    debugLog = debugLogBuilder.toString()
+                )
+            }
+        }
+    }
+    
+    fun loadAuthenticatedUserRepositories() {
+        if (!authTokenStorage.isAuthenticated()) {
+            addLog("❌ Not authenticated - cannot load user repositories")
+            return
+        }
+        
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            _uiState.value = currentState.copy(isLoadingRepositories = true)
+            
+            try {
+                addLog("Loading authenticated user repositories")
+                val repositories = gitHubClient.getAuthenticatedUserRepositories()
+                addLog("✅ Successfully loaded ${repositories.size} user repositories")
+                
+                _uiState.value = currentState.copy(
+                    isLoadingRepositories = false,
+                    repositories = repositories,
+                    debugLog = debugLogBuilder.toString()
+                )
+            } catch (e: Exception) {
+                addLog("❌ Error loading user repositories: ${e.message}")
+                _uiState.value = currentState.copy(
+                    isLoadingRepositories = false,
+                    debugLog = debugLogBuilder.toString()
+                )
+            }
+        }
+    }
 }

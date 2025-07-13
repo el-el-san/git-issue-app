@@ -51,29 +51,27 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
         
-        // Setup repository dropdown with el-el-san repositories
-        val repositories = arrayOf(
-            "el-el-san/git-issue-app",
-            "el-el-san/portfolio-website",
-            "el-el-san/react-dashboard",
-            "el-el-san/kotlin-projects",
-            "el-el-san/flutter-apps",
-            "el-el-san/vue-components",
-            "el-el-san/node-api",
-            "el-el-san/python-tools",
-            "el-el-san/docker-configs"
-        )
-        
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, repositories)
-        binding.repositoryDropdown.setAdapter(adapter)
+        // Setup repository dropdown (will be populated dynamically)
+        var repositoryAdapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, mutableListOf())
+        binding.repositoryDropdown.setAdapter(repositoryAdapter)
         
         binding.repositoryDropdown.setOnItemClickListener { _, _, position, _ ->
-            val selectedRepo = repositories[position]
-            val parts = selectedRepo.split("/")
+            val selectedRepo = repositoryAdapter.getItem(position) ?: return@setOnItemClickListener
+            val cleanRepo = selectedRepo.substringBefore(" ") // Remove display icons/text
+            val parts = cleanRepo.split("/")
             if (parts.size == 2) {
                 viewModel.setRepository(parts[0], parts[1])
-                binding.repositoryInput.setText(selectedRepo)
-                binding.statusText.text = "✅ Repository set to $selectedRepo\nTap 'Load Issues' to fetch data"
+                binding.repositoryInput.setText(cleanRepo)
+                binding.statusText.text = "✅ Repository set to $cleanRepo\nTap 'Load Issues' to fetch data"
+            }
+        }
+        
+        // Load repositories button
+        binding.loadReposButton.setOnClickListener {
+            if (viewModel.uiState.value.isAuthenticated) {
+                viewModel.loadAuthenticatedUserRepositories()
+            } else {
+                viewModel.loadUserRepositories("el-el-san")
             }
         }
         
@@ -156,18 +154,31 @@ class MainActivity : AppCompatActivity() {
                     binding.repositoryDropdown.setText(state.currentRepository, false)
                 }
                 
+                // Update repository dropdown when repositories are loaded
+                if (state.repositories.isNotEmpty()) {
+                    val repositoryNames = state.repositories.map { repo ->
+                        "${repo.fullName} ${repo.getDisplayName()}"
+                    }
+                    val adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, repositoryNames)
+                    binding.repositoryDropdown.setAdapter(adapter)
+                }
+                
                 // Update status text
                 val authStatus = if (state.isAuthenticated) "🔒 Authenticated" else "❌ Not Authenticated"
+                val repoStatus = if (state.repositories.isNotEmpty()) "\n📚 ${state.repositories.size} repositories loaded" else ""
+                
                 binding.statusText.text = when {
                     state.isLoading -> "🔄 Loading issues from ${state.currentRepository}..."
-                    state.error != null -> "❌ Error: ${state.error}\n\n$authStatus"
-                    state.issues.isNotEmpty() -> "✅ Found ${state.issues.size} issues from ${state.currentRepository}\n$authStatus"
-                    state.currentRepository.isNotEmpty() -> "📁 Repository: ${state.currentRepository}\n$authStatus\n\nTap 'Load Issues' to fetch data"
-                    else -> "🎉 GitHub Issue Manager\n$authStatus\n\nSet a repository and authenticate"
+                    state.isLoadingRepositories -> "🔄 Loading repositories..."
+                    state.error != null -> "❌ Error: ${state.error}\n\n$authStatus$repoStatus"
+                    state.issues.isNotEmpty() -> "✅ Found ${state.issues.size} issues from ${state.currentRepository}\n$authStatus$repoStatus"
+                    state.currentRepository.isNotEmpty() -> "📁 Repository: ${state.currentRepository}\n$authStatus$repoStatus\n\nTap 'Load Issues' to fetch data"
+                    else -> "🎉 GitHub Issue Manager\n$authStatus$repoStatus\n\nTap 'Load Repos' to see available repositories"
                 }
                 
                 // Update UI visibility
                 binding.loadIssuesButton.isEnabled = !state.isLoading
+                binding.loadReposButton.isEnabled = !state.isLoadingRepositories
                 
                 // Show debug log when there's content or errors
                 if (state.debugLog.isNotEmpty() || state.error != null) {

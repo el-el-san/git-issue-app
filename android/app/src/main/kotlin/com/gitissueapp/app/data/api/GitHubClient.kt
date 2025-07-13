@@ -2,6 +2,7 @@ package com.gitissueapp.app.data.api
 
 import com.gitissueapp.app.data.model.Issue
 import com.gitissueapp.app.data.model.GitHubUser
+import com.gitissueapp.app.data.model.Repository
 import com.gitissueapp.app.data.storage.AuthTokenStorage
 import com.google.gson.Gson
 import com.google.gson.JsonParser
@@ -156,5 +157,87 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
         
         val jsonString = response.body?.string() ?: throw Exception("Empty response")
         gson.fromJson(jsonString, GitHubUser::class.java)
+    }
+    
+    suspend fun getUserRepositories(username: String): List<Repository> = withContext(Dispatchers.IO) {
+        val url = "https://api.github.com/users/$username/repos?sort=updated&per_page=100"
+        
+        android.util.Log.d("GitHubClient", "Fetching repositories for user: $username")
+        
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Accept", "application/vnd.github+json")
+            .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
+            .addAuthHeader()
+            .build()
+        
+        val response = httpClient.newCall(request).execute()
+        
+        if (!response.isSuccessful) {
+            throw Exception("HTTP ${response.code}: ${response.message}")
+        }
+        
+        val jsonString = response.body?.string() ?: throw Exception("Empty response")
+        
+        // Parse JSON array manually
+        val jsonArray = JsonParser.parseString(jsonString).asJsonArray
+        val repositories = mutableListOf<Repository>()
+        
+        android.util.Log.d("GitHubClient", "Found ${jsonArray.size()} repositories for $username")
+        
+        for ((index, jsonElement) in jsonArray.withIndex()) {
+            try {
+                val repository = gson.fromJson(jsonElement, Repository::class.java)
+                repositories.add(repository)
+                android.util.Log.d("GitHubClient", "Parsed repo $index: ${repository.fullName}")
+            } catch (e: Exception) {
+                android.util.Log.w("GitHubClient", "Failed to parse repository $index: ${e.message}")
+            }
+        }
+        
+        android.util.Log.d("GitHubClient", "Successfully parsed ${repositories.size} repositories")
+        repositories
+    }
+    
+    suspend fun getAuthenticatedUserRepositories(): List<Repository> = withContext(Dispatchers.IO) {
+        val url = "https://api.github.com/user/repos?sort=updated&per_page=100&affiliation=owner,collaborator"
+        
+        android.util.Log.d("GitHubClient", "Fetching authenticated user repositories")
+        
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Accept", "application/vnd.github+json")
+            .addHeader("User-Agent", "GitIssueApp")
+            .addHeader("X-GitHub-Api-Version", "2022-11-28")
+            .addAuthHeader()
+            .build()
+        
+        val response = httpClient.newCall(request).execute()
+        
+        if (!response.isSuccessful) {
+            throw Exception("HTTP ${response.code}: ${response.message}")
+        }
+        
+        val jsonString = response.body?.string() ?: throw Exception("Empty response")
+        
+        // Parse JSON array manually
+        val jsonArray = JsonParser.parseString(jsonString).asJsonArray
+        val repositories = mutableListOf<Repository>()
+        
+        android.util.Log.d("GitHubClient", "Found ${jsonArray.size()} repositories for authenticated user")
+        
+        for ((index, jsonElement) in jsonArray.withIndex()) {
+            try {
+                val repository = gson.fromJson(jsonElement, Repository::class.java)
+                repositories.add(repository)
+                android.util.Log.d("GitHubClient", "Parsed repo $index: ${repository.fullName}")
+            } catch (e: Exception) {
+                android.util.Log.w("GitHubClient", "Failed to parse repository $index: ${e.message}")
+            }
+        }
+        
+        android.util.Log.d("GitHubClient", "Successfully parsed ${repositories.size} repositories")
+        repositories
     }
 }
