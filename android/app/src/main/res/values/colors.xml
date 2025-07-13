@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Expressive Color Palette -->
+    
+    <!-- Primary Colors - Dynamic Blue-Purple Gradient -->
+    <color name="primary">#6366F1</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#E0E7FF</color>
+    <color name="on_primary_container">#1E1B4B</color>
+    
+    <!-- Secondary Colors - Warm Accent -->
+    <color name="secondary">#EC4899</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#FCE7F3</color>
+    <color name="on_secondary_container">#831843</color>
+    
+    <!-- Tertiary Colors - Green Success -->
+    <color name="tertiary">#10B981</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    <color name="tertiary_container">#D1FAE5</color>
+    <color name="on_tertiary_container">#064E3B</color>
+    
+    <!-- Surface Colors with Soft Gradients -->
+    <color name="surface">#FAFAFA</color>
+    <color name="surface_variant">#F3F4F6</color>
+    <color name="on_surface">#1F2937</color>
+    <color name="on_surface_variant">#6B7280</color>
+    
+    <!-- Background with subtle gradient support -->
+    <color name="background">#FFFFFF</color>
+    <color name="on_background">#111827</color>
+    
+    <!-- Error Colors -->
+    <color name="error">#EF4444</color>
+    <color name="on_error">#FFFFFF</color>
+    <color name="error_container">#FEE2E2</color>
+    <color name="on_error_container">#7F1D1D</color>
+    
+    <!-- Outline Colors for Neumorphism -->
+    <color name="outline">#E5E7EB</color>
+    <color name="outline_variant">#F3F4F6</color>
+    
+    <!-- Special Colors for 2025 Trends -->
+    <color name="glass_surface">#80FFFFFF</color>
+    <color name="glass_outline">#40FFFFFF</color>
+    <color name="shadow_light">#10000000</color>
+    <color name="shadow_dark">#20000000</color>
+    
+    <!-- Dark Theme Colors -->
+    <color name="dark_primary">#818CF8</color>
+    <color name="dark_surface">#1F2937</color>
+    <color name="dark_background">#111827</color>
+    <color name="dark_on_surface">#F9FAFB</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_end">#EC4899</color>
+    <color name="gradient_surface_start">#FAFAFA</color>
+    <color name="gradient_surface_end">#F3F4F6</color>
+</resources>

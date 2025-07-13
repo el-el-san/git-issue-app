@@ -40,77 +40,159 @@
             android:textColor="?android:attr/textColorPrimary"
             android:layout_marginBottom="16dp" />
 
-        <!-- Instructions -->
-        <TextView
+        <!-- Modern Info Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Modern.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="To access GitHub repositories, you need a Personal Access Token (PAT):"
-            android:textSize="16sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="@color/tertiary_container">
 
-        <!-- Steps -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. Click 'Open GitHub Token Page' below\n2. Generate a token with 'repo' scope\n3. Copy the token and paste it here\n4. Click 'Test Token' to verify\n5. Click 'Save Token' to complete setup"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginBottom="20dp"
-            android:lineSpacingExtra="4dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🔑 Personal Access Token Required"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/on_tertiary_container"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To access GitHub repositories securely, you need a Personal Access Token (PAT)."
+                    android:textSize="16sp"
+                    android:textColor="@color/on_tertiary_container"
+                    android:alpha="0.9"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Steps with modern styling -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1️⃣ Click 'Open GitHub Token Page'"
+                        android:textSize="14sp"
+                        android:textColor="@color/on_tertiary_container"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="2️⃣ Generate token with 'repo' scope"
+                        android:textSize="14sp"
+                        android:textColor="@color/on_tertiary_container"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="3️⃣ Copy and paste token below"
+                        android:textSize="14sp"
+                        android:textColor="@color/on_tertiary_container"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="4️⃣ Test and save your token"
+                        android:textSize="14sp"
+                        android:textColor="@color/on_tertiary_container" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Open GitHub Button -->
         <Button
             android:id="@+id/openGitHubButton"
+            style="@style/Widget.Modern.Button.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🔗 Open GitHub Token Page"
-            android:layout_marginBottom="24dp"
-            style="@style/Widget.Material3.Button.UnelevatedButton" />
+            android:text="🌐 Open GitHub Token Page"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Token Input -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Token Input Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Modern.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Personal Access Token">
+            android:layout_marginBottom="24dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tokenEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:fontFamily="monospace"
-                android:textSize="14sp" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🔐 Enter Your Token"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/on_surface"
+                    android:layout_marginBottom="16dp" />
 
-        <!-- Action Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Modern.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:hint="🔑 ghp_xxxxxxxxxxxxxxxxxxxx"
+                    app:startIconDrawable="@android:drawable/ic_secure">
 
-            <Button
-                android:id="@+id/testTokenButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="Test Token"
-                style="@style/Widget.Material3.Button.TextButton" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tokenEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:fontFamily="monospace"
+                        android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/saveTokenButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="Save Token"
-                style="@style/Widget.Material3.Button" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+                <!-- Action Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/testTokenButton"
+                        style="@style/Widget.Modern.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="🔍 Test Token" />
+
+                    <Button
+                        android:id="@+id/saveTokenButton"
+                        style="@style/Widget.Modern.Button.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="💾 Save Token" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Loading Indicator -->
         <ProgressBar

@@ -14,10 +14,10 @@
 
         <Button
             android:id="@+id/backButton"
+            style="@style/Widget.Modern.Button.Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="← Back"
-            style="@style/Widget.Material3.Button.TextButton" />
+            android:text="← Back" />
 
         <View
             android:layout_width="0dp"
@@ -26,95 +26,163 @@
 
         <Button
             android:id="@+id/createButton"
+            style="@style/Widget.Modern.Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Issue"
-            style="@style/Widget.Material3.Button" />
+            android:text="✨ Create Issue" />
 
     </LinearLayout>
 
-    <!-- Title -->
-    <TextView
+    <!-- Modern Header Card -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Modern.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create New Issue"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="?android:attr/textColorPrimary"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="24dp"
+        app:cardBackgroundColor="@color/error_container">
 
-    <!-- Repository Info -->
-    <TextView
-        android:id="@+id/repositoryText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Repository: owner/repo"
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorSecondary"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Issue Title Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Issue Title">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titleEditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:inputType="textCapSentences|textMultiLine" />
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="➕ Create Issue"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/on_error_container"
+                android:fontFamily="sans-serif-black"
+                android:layout_marginBottom="8dp" />
 
-    <!-- Issue Body Input -->
-    <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:id="@+id/repositoryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repository: owner/repo"
+                android:textSize="16sp"
+                android:textColor="@color/on_error_container"
+                android:alpha="0.8" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Form Card -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Modern.Card"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        android:hint="Issue Description (optional)">
+        android:layout_marginBottom="16dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/bodyEditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top"
-            android:inputType="textCapSentences|textMultiLine" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📝 Issue Details"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/on_surface"
+                android:layout_marginBottom="20dp" />
 
-    <!-- Loading Indicator -->
-    <ProgressBar
-        android:id="@+id/loadingProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+            <!-- Issue Title Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Modern.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="🏷️ Issue Title"
+                app:startIconDrawable="@android:drawable/ic_menu_edit">
 
-    <!-- Error Message -->
-    <TextView
-        android:id="@+id/errorText"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="3"
+                    android:textSize="16sp"
+                    android:inputType="textCapSentences|textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Issue Body Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Modern.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="📄 Issue Description (optional)"
+                app:startIconDrawable="@android:drawable/ic_menu_view">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bodyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:textSize="16sp"
+                    android:inputType="textCapSentences|textMultiLine" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Status and Actions Card -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Modern.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="14sp"
-        android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Error creating issue"
-        android:textIsSelectable="true" />
+        app:cardBackgroundColor="@color/surface_variant">
 
-    <!-- Copy Error Button -->
-    <Button
-        android:id="@+id/copyErrorButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Copy Error Details"
-        android:visibility="gone"
-        style="@style/Widget.Material3.Button.TextButton" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Loading Indicator -->
+            <ProgressBar
+                android:id="@+id/loadingProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+
+            <!-- Error Message -->
+            <TextView
+                android:id="@+id/errorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp"
+                android:background="@color/error_container"
+                android:padding="16dp"
+                android:text="Error creating issue"
+                android:textIsSelectable="true" />
+
+            <!-- Copy Error Button -->
+            <Button
+                android:id="@+id/copyErrorButton"
+                style="@style/Widget.Modern.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📋 Copy Error Details"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

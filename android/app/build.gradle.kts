@@ -11,8 +11,8 @@ android {
         applicationId = "com.gitissueapp.patversion"
         minSdk = 24
         targetSdk = 34
-        versionCode = 10
-        versionName = "10.0.0"
+        versionCode = 11
+        versionName = "11.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

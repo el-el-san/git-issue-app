@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             if (repoText.contains("/") && repoText.split("/").size == 2) {
                 val parts = repoText.split("/")
                 viewModel.setRepository(parts[0], parts[1])
-                binding.statusText.text = "Repository set to $repoText\nTap 'Load Issues' to fetch data"
+                binding.statusText.text = "✅ Repository set to $repoText\nTap 'Load Issues' to fetch data"
             } else {
                 binding.statusText.text = "❌ Invalid format. Use: owner/repository"
             }
@@ -123,12 +123,19 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
+                // Update repository input with saved value
+                if (state.currentRepository.isNotEmpty() && binding.repositoryInput.text.toString().isEmpty()) {
+                    binding.repositoryInput.setText(state.currentRepository)
+                }
+                
                 // Update status text
+                val authStatus = if (state.isAuthenticated) "🔒 Authenticated" else "❌ Not Authenticated"
                 binding.statusText.text = when {
-                    state.isLoading -> "🔄 Loading issues from GitHub..."
-                    state.error != null -> "❌ Error: ${state.error}"
-                    state.issues.isNotEmpty() -> "✅ Found ${state.issues.size} issues"
-                    else -> "🎉 GitHub Issue Manager\n\nTap 'Load Issues' to fetch data"
+                    state.isLoading -> "🔄 Loading issues from ${state.currentRepository}..."
+                    state.error != null -> "❌ Error: ${state.error}\n\n$authStatus"
+                    state.issues.isNotEmpty() -> "✅ Found ${state.issues.size} issues from ${state.currentRepository}\n$authStatus"
+                    state.currentRepository.isNotEmpty() -> "📁 Repository: ${state.currentRepository}\n$authStatus\n\nTap 'Load Issues' to fetch data"
+                    else -> "🎉 GitHub Issue Manager\n$authStatus\n\nSet a repository and authenticate"
                 }
                 
                 // Update UI visibility
