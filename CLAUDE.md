@@ -303,10 +303,10 @@ jobs:
 - ✅ **Phase 3**: 核心機能 (Issue一覧、詳細、作成)
 - ✅ **GitHub Actions**: 自動APKビルド設定
 
-### 最新ビルド: v10.0.0 (2025-07-13) - PAT認証版
+### 最新ビルド: v10.0.0 (2025-07-13) - PAT認証版 ✅
 **場所**: `/storage/emulated/0/Download/`
-- **GitIssueApp-v10-PAT-release.apk** (予定) - 本番用
-- **GitIssueApp-v10-PAT-debug.apk** (予定) - デバッグ用
+- **GitIssueApp-v10-PAT-release.apk** (6.1MB) - 本番用
+- **GitIssueApp-v10-PAT-debug.apk** (7.6MB) - デバッグ用
 
 **重要な変更:**
 1. **OAuth → PAT認証に変更** (セキュリティ向上・シンプル化)
