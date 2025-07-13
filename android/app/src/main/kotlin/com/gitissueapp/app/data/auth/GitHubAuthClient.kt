@@ -25,16 +25,13 @@ class GitHubAuthClient {
     private val clientId = "Ov23liI4dT9YdYF7iUGf"
     
     suspend fun requestDeviceCode(): DeviceCodeResponse = withContext(Dispatchers.IO) {
-        val requestBody = mapOf(
-            "client_id" to clientId,
-            "scope" to "repo"
-        )
+        val formBody = "client_id=$clientId&scope=repo"
         
         val request = Request.Builder()
             .url("https://github.com/login/device/code")
             .addHeader("Accept", "application/json")
             .addHeader("User-Agent", "GitIssueApp")
-            .post(gson.toJson(requestBody).toRequestBody("application/json".toMediaType()))
+            .post(formBody.toRequestBody("application/x-www-form-urlencoded".toMediaType()))
             .build()
         
         val response = httpClient.newCall(request).execute()
@@ -48,17 +45,13 @@ class GitHubAuthClient {
     }
     
     suspend fun pollForAccessToken(deviceCode: String): AccessTokenResponse = withContext(Dispatchers.IO) {
-        val requestBody = mapOf(
-            "client_id" to clientId,
-            "device_code" to deviceCode,
-            "grant_type" to "urn:ietf:params:oauth:grant-type:device_code"
-        )
+        val formBody = "client_id=$clientId&device_code=$deviceCode&grant_type=urn:ietf:params:oauth:grant-type:device_code"
         
         val request = Request.Builder()
             .url("https://github.com/login/oauth/access_token")
             .addHeader("Accept", "application/json")
             .addHeader("User-Agent", "GitIssueApp")
-            .post(gson.toJson(requestBody).toRequestBody("application/json".toMediaType()))
+            .post(formBody.toRequestBody("application/x-www-form-urlencoded".toMediaType()))
             .build()
         
         val response = httpClient.newCall(request).execute()
