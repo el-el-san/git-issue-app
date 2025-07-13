@@ -51,17 +51,17 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
         }
         
-        // Setup repository dropdown with popular repositories
+        // Setup repository dropdown with el-el-san repositories
         val repositories = arrayOf(
             "el-el-san/git-issue-app",
-            "microsoft/vscode",
-            "facebook/react",
-            "google/flutter",
-            "kotlin/kotlin",
-            "microsoft/typescript",
-            "angular/angular",
-            "nodejs/node",
-            "torvalds/linux"
+            "el-el-san/portfolio-website",
+            "el-el-san/react-dashboard",
+            "el-el-san/kotlin-projects",
+            "el-el-san/flutter-apps",
+            "el-el-san/vue-components",
+            "el-el-san/node-api",
+            "el-el-san/python-tools",
+            "el-el-san/docker-configs"
         )
         
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, repositories)
