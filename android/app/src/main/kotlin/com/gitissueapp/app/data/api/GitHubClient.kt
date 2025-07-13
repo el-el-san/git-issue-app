@@ -21,8 +21,13 @@ class GitHubClient(private val authTokenStorage: AuthTokenStorage? = null) {
     private val gson = Gson()
     
     private fun Request.Builder.addAuthHeader(): Request.Builder {
-        authTokenStorage?.getAuthorizationHeader()?.let { authHeader ->
+        val authHeader = authTokenStorage?.getAuthorizationHeader()
+        android.util.Log.d("GitHubClient", "Auth header being added: $authHeader")
+        
+        if (authHeader != null) {
             addHeader("Authorization", authHeader)
+        } else {
+            android.util.Log.w("GitHubClient", "No auth header available - request will be unauthenticated")
         }
         return this
     }

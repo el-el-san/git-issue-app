@@ -102,6 +102,14 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun openCreateIssue() {
+        // Check authentication first
+        val authTokenStorage = com.gitissueapp.app.data.storage.AuthTokenStorage(this)
+        if (!authTokenStorage.isAuthenticated()) {
+            Toast.makeText(this, "Please authenticate with GitHub first", Toast.LENGTH_LONG).show()
+            openAuthActivity()
+            return
+        }
+        
         val repoText = viewModel.getCurrentRepository()
         val parts = repoText.split("/")
         if (parts.size == 2) {
